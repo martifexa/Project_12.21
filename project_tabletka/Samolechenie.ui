@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>746</width>
+    <height>363</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>40</y>
+      <width>361</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Лечение</string>
+    </property>
+    <widget class="QCheckBox" name="checkBox_temp">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>180</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Высокая температура</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_nos">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>150</y>
+       <width>141</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Заложенность носа</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_headpain">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Головная боль</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_throatpain">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>180</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Боль в горле</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_allergia">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>150</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Аллергия</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_kashel_sux">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>90</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Сухой кашель</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_diarea">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Диарея</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_varikoz">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>120</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Варикоз</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_stomachpain">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>30</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Боль в животе</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_musculpain">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>60</y>
+       <width>181</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Боль в мышцах и суставах</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_kashel_vlaz">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Влажный кашель</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_teethpain">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>90</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Зубная боль</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_find_pills">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>220</y>
+       <width>221</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Найти лекарства и их аналоги</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>40</y>
+      <width>301</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Профилактика</string>
+    </property>
+    <widget class="QCheckBox" name="checkBox_gripp">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>141</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Простуда и грипп</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_virus">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>161</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Вирусные заболевания</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_immun">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>90</y>
+       <width>161</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Местный иммунитет</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_heart">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>251</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Сердечно-сосудистые заболевания</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_find_semiills">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>251</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Найти профилактические средства</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>10</y>
+      <width>251</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Выберите нужные пункты:</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>746</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
