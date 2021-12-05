@@ -5,6 +5,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from Samolechenie import Ui_MainWindow
 from Main_form import Ui_Form1
 from lechenie import Ui_Form2
+from vhod import Ui_MainWindow_reg
+from kabinet import Ui_MainWindow_kab
+
 
 
 class MainWindow(QMainWindow, Ui_Form1):
@@ -44,9 +47,29 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
                             (self.checkBox_virus, self.checkBox_gripp.isChecked()),
                             (self.checkBox_immun, self.checkBox_gripp.isChecked()),
                             (self.checkBox_heart, self.checkBox_gripp.isChecked())]
+        self.disease = [self.checkBox_temp,
+                        self.checkBox_nos,
+                        self.checkBox_varikoz,
+                        self.checkBox_allergia,
+                        self.checkBox_diarea,
+                        self.checkBox_kashel_sux,
+                        self.checkBox_kashel_vlaz,
+                        self.checkBox_musculpain,
+                        self.checkBox_headpain,
+                        self.checkBox_throatpain,
+                        self.checkBox_stomachpain,
+                        self.checkBox_teethpain]
 
     def pills(self):
-        pass
+        lst_tabl = []
+        for elem in self.disease:
+            if elem.isChecked():
+                lst_tabl.append(elem.text())
+        print(lst_tabl)
+
+
+
+
 
 
 class Lechenie(QMainWindow, Ui_Form2):
@@ -58,7 +81,7 @@ class Lechenie(QMainWindow, Ui_Form2):
         self.create_tablets()
         self.pushButton_add.clicked.connect(self.add)
         self.pushButton_delete.clicked.connect(self.delete)
-        self.pushButton_back.clicked.connect(self.hide())
+        self.pushButton_back.clicked.connect(lambda: self.hide())
         self.spinBox.setValue(1)
         self.lineEdit.setText('0')
 
