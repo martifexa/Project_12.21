@@ -7,23 +7,29 @@ from Main_form import Ui_Form1
 from lechenie import Ui_Form2
 from vhod import Ui_MainWindow_reg
 from kabinet import Ui_MainWindow_kab
+from okno_samol import Ui_MainWindow_okno
 
 
 
-class MainWindow(QMainWindow, Ui_Form1):
+class MainWindow(QMainWindow, Ui_Form1, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.samolechenie = Samolechenie()
         self.lechenie = Lechenie()
+        self.find_pills = find_pills()
         self.setupUi(self)
         self.pushButton_yes.clicked.connect(self.yes)
         self.pushButton_no.clicked.connect(self.no)
+        #self.pushButton_find_pills.clicked.connect(self.find)
 
     def yes(self):
         self.lechenie.show()
 
     def no(self):
         self.samolechenie.show()
+
+    def find(self):
+        self.find_pills.show()
 
 
 class Samolechenie(QMainWindow, Ui_MainWindow):
@@ -61,14 +67,46 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
                         self.checkBox_teethpain]
 
     def pills(self):
-        lst_tabl = []
+        self.lst_tabl = []
         for elem in self.disease:
             if elem.isChecked():
-                lst_tabl.append(elem.text())
-        print(lst_tabl)
+                self.lst_tabl.append(elem.text())
+        print(self.lst_tabl)
 
 
+class find_pills(Samolechenie, QMainWindow, Ui_MainWindow_okno):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.connection = sqlite3.connect('tabletochki.db')
+        self.pushButton_find_pills.clicked.connect(self.pills)
+        self.pushButton_find_pills.clicked.connect(self.create_tablets)
+        self.pushButton_find_semiills.clicked.connect(self.create_analogues)
 
+
+    def pills(self):
+        super().pills()
+
+
+    def create_tablets(self):
+        cursor = self.connection.cursor()
+        all_tablets = list(cursor.execute("""SELECT name_of_pills, for_what, dosage, cost FROM tabletka"""))
+        add = []
+        for i in self.lst_tabl:
+            for elem in all_tablets:
+                if i == elem[1]:
+                    add.append((elem[0], elem[2], elem[3]))
+        self.listWidget.addItems(add)
+
+    def create_analogues(self):
+        cursor = self.connection.cursor()
+        all_analogue = list(cursor.execute("""SELECT name_of_pills, for_what, dosage, cost FROM analogue"""))
+        add = []
+        for i in self.lst_tabl:
+            for elem in all_analogue:
+                if i == elem[1]:
+                    add.append((elem[0], elem[2], elem[3]))
+        self.listWidget.addItems(add)
 
 
 
@@ -89,6 +127,7 @@ class Lechenie(QMainWindow, Ui_Form2):
         cursor = self.connection.cursor()
         all_tablets = list(cursor.execute("""SELECT name_of_pills, dosage, cost FROM tabletka"""))
         all_analogue = list(cursor.execute("""SELECT name_of_pills, dosage, cost FROM analogue"""))
+        print(all_tablets)
         lst_all = all_tablets + all_analogue
         for elem in lst_all:
             elem = list(elem)
