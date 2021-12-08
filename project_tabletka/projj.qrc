@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>Screenshot_11.png</file>
+    <file>Screenshot_6.png</file>
+    <file>Screenshot_7.png</file>
+    <file>Screenshot_8.png</file>
+    <file>Screenshot_9.png</file>
+    <file>Screenshot_10.png</file>
+    <file>Screenshot_5.png</file>
+    <file>Screenshot_1.png</file>
+    <file>Screenshot_2.png</file>
+    <file>Screenshot_3.png</file>
+    <file>Screenshot_4.png</file>
+    <file>Screenshot_8.png</file>
+    <file>png-clipart-capsule-colorful-capsules-color-splash-color-pencil.png</file>
+  </qresource>
+</RCC>
