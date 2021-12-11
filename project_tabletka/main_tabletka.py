@@ -4,10 +4,11 @@ import sqlite3
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from Samolechenie import Ui_MainWindow
 from Main_form import Ui_Form1
-from lechenie import Ui_Form2
+from lechenie1 import Ui_Form2
 from vhod import Ui_MainWindow_reg
 from kabinet import Ui_MainWindow_kab
-from okno_samol import Ui_MainWindow_okno
+from okno_samol1 import Ui_MainWindow_okno
+from okno_prof import Ui_MainWindow_prof
 
 
 class MainWindow(QMainWindow, Ui_Form1):
@@ -31,22 +32,11 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.pushButton_find_pills.clicked.connect(self.pills)
-        self.disease = [(self.checkBox_temp, self.checkBox_temp.isChecked()),
-                        (self.checkBox_nos, self.checkBox_nos.isChecked()),
-                        (self.checkBox_varikoz, self.checkBox_varikoz.isChecked()),
-                        (self.checkBox_allergia, self.checkBox_allergia.isChecked()),
-                        (self.checkBox_diarea, self.checkBox_diarea.isChecked()),
-                        (self.checkBox_kashel_sux, self.checkBox_kashel_sux.isChecked()),
-                        (self.checkBox_kashel_vlaz, self.checkBox_kashel_vlaz.isChecked()),
-                        (self.checkBox_musculpain, self.checkBox_musculpain.isChecked()),
-                        (self.checkBox_headpain, self.checkBox_headpain.isChecked()),
-                        (self.checkBox_throatpain, self.checkBox_throatpain.isChecked()),
-                        (self.checkBox_stomachpain, self.checkBox_stomachpain.isChecked()),
-                        (self.checkBox_teethpain, self.checkBox_teethpain.isChecked())]
-        self.profilaktic = [(self.checkBox_gripp, self.checkBox_gripp.isChecked()),
-                            (self.checkBox_virus, self.checkBox_gripp.isChecked()),
-                            (self.checkBox_immun, self.checkBox_gripp.isChecked()),
-                            (self.checkBox_heart, self.checkBox_gripp.isChecked())]
+        self.pushButton_find_semiills.clicked.connect(self.prevention)
+        self.prevent = [self.checkBox_gripp,
+                        self.checkBox_virus,
+                        self.checkBox_immun,
+                        self.checkBox_heart]
         self.disease = [self.checkBox_temp,
                         self.checkBox_nos,
                         self.checkBox_varikoz,
@@ -65,9 +55,16 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
         for elem in self.disease:
             if elem.isChecked():
                 lst_sympt.append(elem.text())
-        print(lst_sympt)
         self.find_pills = FindPills(lst_sympt)
         self.find_pills.show()
+
+    def prevention(self):
+        lst_prof = []
+        for elem in self.prevent:
+            if elem.isChecked():
+                lst_prof.append(elem.text())
+        self.prof = Prevention(lst_prof)
+        self.prof.show()
 
 
 class FindPills(QMainWindow, Ui_MainWindow_okno):
@@ -78,16 +75,14 @@ class FindPills(QMainWindow, Ui_MainWindow_okno):
         self.connection = sqlite3.connect('tabletochki.db')
         self.create_tablets()
         self.create_analogues()
-        # self.pushButton_find_pills.clicked.connect(self.create_tablets)
-        # self.pushButton_find_semiills.clicked.connect(self.create_analogues)
+        self.pushButton_save_2.clicked.connect(self.count)
+        self.pushButton_2.clicked.connect(self.exit)
 
     def create_tablets(self):
         cursor = self.connection.cursor()
-        print(str(self.lst_sympt)[1:-1])
         all_tablets = list(cursor.execute(f"""SELECT name_of_pills, for_what, dosage, cost FROM tabletka
         WHERE for_what in (SELECT id_symptom FROM symptoms 
         WHERE name in ({str(self.lst_sympt)[1:-1]}))"""))
-        print(all_tablets)
         for elem in all_tablets:
             elem = [str(i) for i in elem]
             elem[1] = list(cursor.execute(f"""SELECT name FROM symptoms WHERE id_symptom = {int(elem[1])}"""))
@@ -97,13 +92,72 @@ class FindPills(QMainWindow, Ui_MainWindow_okno):
 
     def create_analogues(self):
         cursor = self.connection.cursor()
-        all_analogue = list(cursor.execute("""SELECT name_of_pills, for_what, dosage, cost FROM analogue"""))
+        all_analogue = list(cursor.execute("""SELECT id_analogue, name_of_pills, for_what, dosage, cost FROM analogue"""))
         add = []
-        for i in self.lst_sympt:
+        id_analog = list(cursor.execute(f"""SELECT id_analogue FROM analogue
+        WHERE for_what in (SELECT id_symptom FROM symptoms 
+        WHERE name in ({str(self.lst_sympt)[1:-1]}))"""))
+        for i in id_analog:
             for elem in all_analogue:
-                if i == elem[1]:
-                    add.append((elem[0], elem[2], elem[3]))
+               if i[0] == elem[0]:
+                    symp = list(cursor.execute(f"""SELECT name FROM symptoms WHERE id_symptom = {int(elem[2])}"""))
+                    symp = str(symp)[3:-4]
+                    add.append(f'{elem[1]} - {symp} - {elem[3]} - {elem[4]} ')
+        add = list(map(lambda x: str(x), add))
+        self.listWidget_2.addItems(add)
+
+    def count(self):
+        noun = [x.text().split(' - ') for x in self.listWidget.selectedItems()]
+        noun1 = [x.text().split(' - ') for x in self.listWidget_2.selectedItems()]
+        counter = []
+        for i in noun:
+            counter.append(int(i[3]))
+        for i in noun1:
+            counter.append(int(i[3]))
+        count = sum(counter)
+        self.lineEdit.setText(f'{count} руб.')
+
+    def exit(self):
+        self.hide()
+
+
+class Prevention(QMainWindow, Ui_MainWindow_prof):
+    def __init__(self, lst_prof):
+        super().__init__()
+        self.lst_prof = lst_prof
+        self.setupUi(self)
+        self.connection = sqlite3.connect('tabletochki.db')
+        self.create_prevents()
+        self.pushButton_itog.clicked.connect(self.count)
+        self.pushButton_3.clicked.connect(self.exit)
+
+    def create_prevents(self):
+        cursor = self.connection.cursor()
+        all_prevents = list(cursor.execute("""SELECT id, name, for_what, dosage, cost FROM prevention"""))
+        add = []
+        id = list(cursor.execute(f"""SELECT id FROM prevention
+                WHERE for_what in (SELECT id_symptom FROM symptoms 
+                WHERE name in ({str(self.lst_prof)[1:-1]}))"""))
+        for i in id:
+            for elem in all_prevents:
+                if i[0] == elem[0]:
+                    symp = list(cursor.execute(f"""SELECT name FROM symptoms
+                    WHERE id_symptom in (SELECT for_what FROM prevention WHERE for_what = {int(elem[2])})"""))
+                    symp = str(symp)[3:-4]
+                    add.append(f'{elem[1]} - {symp} - {elem[3]} - {elem[4]} ')
+        add = list(map(lambda x: str(x), add))
         self.listWidget.addItems(add)
+
+    def count(self):
+        noun = [x.text().split(' - ') for x in self.listWidget.selectedItems()]
+        counter = []
+        for i in noun:
+            counter.append(int(i[3]))
+        count = sum(counter)
+        self.lineEdit.setText(f'{count} руб.')
+
+    def exit(self):
+        self.hide()
 
 
 class Lechenie(QMainWindow, Ui_Form2):
