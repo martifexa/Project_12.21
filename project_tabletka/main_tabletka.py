@@ -1,36 +1,152 @@
 import sys
 import sqlite3
-
+from datetime import datetime
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from Samolechenie import Ui_MainWindow
-from Main_form import Ui_Form1
 from lechenie1 import Ui_Form2
 from vhod import Ui_MainWindow_reg
 from kabinet import Ui_MainWindow_kab
 from okno_samol1 import Ui_MainWindow_okno
 from okno_prof import Ui_MainWindow_prof
+from zakaz import Ui_Form_zakaz
+from info import Ui_Form_info
 
 
-class MainWindow(QMainWindow, Ui_Form1):
+class Registr(QMainWindow, Ui_MainWindow_reg):
     def __init__(self):
         super().__init__()
-        self.samolechenie = Samolechenie()
-        self.lechenie = Lechenie()
         self.setupUi(self)
-        self.pushButton_yes.clicked.connect(self.yes)
-        self.pushButton_no.clicked.connect(self.no)
+        self.connection = sqlite3.connect('tabletochki.db')
+        self.label_16.hide()
+        self.label_17.hide()
+        self.label_18.hide()
+        self.pushButton.clicked.connect(self.login)
+        self.pushButton_2.clicked.connect(self.enter)
+        self.lineEdit_3.textChanged.connect(self.change)
+        self.lineEdit_4.textChanged.connect(self.change)
+        self.lineEdit.textChanged.connect(self.change)
+
+    def change(self):
+        self.label_16.hide()
+        self.label_17.hide()
+        self.label_18.hide()
+        self.label_18.setText('Такой логин уже существует')
+
+    def login(self):
+        if self.lineEdit.text():
+            cursor = self.connection.cursor()
+            id_user = list(cursor.execute(f"""SELECT id_user FROM user
+                            WHERE user_login = '{self.lineEdit.text()}'"""))
+            if not id_user:
+                cursor.execute(
+                    f"""INSERT INTO user(user_login, user_password)
+                     VALUES ('{self.lineEdit.text()}', '{self.lineEdit_2.text()}')""")
+                self.connection.commit()
+                id_user = list(cursor.execute(f"""SELECT id_user FROM user
+                                        WHERE user_login = '{self.lineEdit.text()}'"""))
+                id_user = str(id_user)[2:-3]
+                cursor.execute(f"""CREATE TABLE table{id_user} (
+                                    id_order INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    name STRING,
+                                    date DATE,
+                                    coast STRING, 
+                                    info STRING
+                                    )""")
+                self.connection.commit()
+                self.kabinet = Kabinet(id_user)
+                self.kabinet.show()
+                self.hide()
+            else:
+                self.label_18.show()
+        else:
+            self.label_18.setText('Логин должен содержать хотя бы 1 символ')
+            self.label_18.show()
+
+    def enter(self):
+        cursor = self.connection.cursor()
+        id_user = list(cursor.execute(f"""SELECT id_user FROM user
+        WHERE user_login = '{self.lineEdit_4.text()}'"""))
+        if not id_user:
+            self.label_16.show()
+        else:
+            cursor = self.connection.cursor()
+
+            right_password = list(cursor.execute(f"""SELECT user_password FROM user
+            WHERE id_user = {int(str(id_user)[2:-3])}"""))
+            right_password[0] = list(right_password[0])
+            if self.lineEdit_3.text() == right_password[0][0]:
+                self.kabinet = Kabinet(str(id_user)[2:-3])
+                self.kabinet.show()
+                self.hide()
+            else:
+                self.label_17.show()
+
+
+class Kabinet(QMainWindow, Ui_MainWindow_kab):
+    def __init__(self, id_user):
+        super().__init__()
+        self.setupUi(self)
+        self.connection = sqlite3.connect('tabletochki.db')
+        self.user_id = id_user
+        self.add_item_to_lw()
+        self.pushButton.clicked.connect(self.yes)
+        self.pushButton_2.clicked.connect(self.no)
+        self.listWidget.doubleClicked.connect(self.info)
+
+    def add_item_to_lw(self):
+        cursor = self.connection.cursor()
+        items = list(cursor.execute(f"""SELECT date, name, coast FROM table{self.user_id}"""))
+        items = list(map(list, items))
+        for elem in items:
+            st = f'{elem[0]} : {elem[1]} - {elem[2]}'
+            self.listWidget.addItem(st)
+
+    def info(self):
+        cursor = self.connection.cursor()
+        item = self.listWidget.currentItem().text()
+        item = item.split(' : ')
+        lst = item[1][::-1].split(' - ', maxsplit=1)
+        lst = list(map(lambda x: x[::-1], lst))
+        item.remove(item[1])
+        item.extend(lst)
+        info = list((cursor.execute(f"""SELECT info FROM table{self.user_id}
+        WHERE name = '{item[2]}' AND coast = '{item[1]}' AND date = '{item[0]}'""")))
+        self.infowidget = Info_Widget(info, item[1], item[0])
+        self.infowidget.show()
 
     def yes(self):
+        self.lechenie = Lechenie(self.user_id)
         self.lechenie.show()
 
     def no(self):
+        self.samolechenie = Samolechenie(self.user_id)
         self.samolechenie.show()
 
 
-class Samolechenie(QMainWindow, Ui_MainWindow):
-    def __init__(self):
+class Info_Widget(QMainWindow, Ui_Form_info):
+    def __init__(self, info, cost, date):
         super().__init__()
         self.setupUi(self)
+        self.info = info
+        self.cost = cost
+        self.date = date
+        self.pushButton.clicked.connect(lambda: self.hide())
+        self.dan()
+
+    def dan(self):
+        self.info[0] = list(self.info[0])
+        info = self.info[0][0].split('\n')
+        info.append('\n')
+        info.append(f'Дата заказа: {self.date}')
+        info.append(f"Общая сумма заказа: {self.cost}")
+        self.listWidget.addItems(info)
+
+
+class Samolechenie(QMainWindow, Ui_MainWindow):
+    def __init__(self, user_id):
+        super().__init__()
+        self.setupUi(self)
+        self.user_id = user_id
         self.pushButton_find_pills.clicked.connect(self.pills)
         self.pushButton_find_semiills.clicked.connect(self.prevention)
         self.prevent = [self.checkBox_gripp,
@@ -55,7 +171,7 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
         for elem in self.disease:
             if elem.isChecked():
                 lst_sympt.append(elem.text())
-        self.find_pills = FindPills(lst_sympt)
+        self.find_pills = FindPills(lst_sympt, self.user_id)
         self.find_pills.show()
 
     def prevention(self):
@@ -63,20 +179,22 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
         for elem in self.prevent:
             if elem.isChecked():
                 lst_prof.append(elem.text())
-        self.prof = Prevention(lst_prof)
+        self.prof = Prevention(lst_prof, self.user_id)
         self.prof.show()
 
 
 class FindPills(QMainWindow, Ui_MainWindow_okno):
-    def __init__(self, lst_sympt):
+    def __init__(self, lst_sympt, user_id):
         super().__init__()
         self.lst_sympt = lst_sympt
+        self.user_id = user_id
         self.setupUi(self)
         self.connection = sqlite3.connect('tabletochki.db')
         self.create_tablets()
         self.create_analogues()
         self.pushButton_save_2.clicked.connect(self.count)
         self.pushButton_2.clicked.connect(self.exit)
+        self.pushButton_save.clicked.connect(self.save)
 
     def create_tablets(self):
         cursor = self.connection.cursor()
@@ -120,16 +238,25 @@ class FindPills(QMainWindow, Ui_MainWindow_okno):
     def exit(self):
         self.hide()
 
+    def save(self):
+        if self.lineEdit.text():
+            items = [x.text() for x in self.listWidget.selectedItems()]
+            items.extend([x.text() for x in self.listWidget_2.selectedItems()])
+            self.zakaz = Zakaz(items, self.user_id, self.lineEdit.text())
+            self.zakaz.show()
+
 
 class Prevention(QMainWindow, Ui_MainWindow_prof):
-    def __init__(self, lst_prof):
+    def __init__(self, lst_prof, user_id):
         super().__init__()
         self.lst_prof = lst_prof
+        self.user_id = user_id
         self.setupUi(self)
         self.connection = sqlite3.connect('tabletochki.db')
         self.create_prevents()
         self.pushButton_itog.clicked.connect(self.count)
         self.pushButton_3.clicked.connect(self.exit)
+        self.pushButton_save.clicked.connect(self.save)
 
     def create_prevents(self):
         cursor = self.connection.cursor()
@@ -159,19 +286,26 @@ class Prevention(QMainWindow, Ui_MainWindow_prof):
     def exit(self):
         self.hide()
 
+    def save(self):
+        items = [x.text() for x in self.listWidget.selectedItems()]
+        self.zakaz = Zakaz(items, self.user_id, self.lineEdit.text())
+        self.zakaz.show()
+
 
 class Lechenie(QMainWindow, Ui_Form2):
-    def __init__(self):
+    def __init__(self, user_id):
         super().__init__()
         self.setupUi(self)
+        self.user_id = user_id
         self.connection = sqlite3.connect('tabletochki.db')
         self.comboBox.setEditable(True)
         self.create_tablets()
         self.pushButton_add.clicked.connect(self.add)
         self.pushButton_delete.clicked.connect(self.delete)
         self.pushButton_back.clicked.connect(lambda: self.hide())
+        self.pushButton_create.clicked.connect(self.create_order)
         self.spinBox.setValue(1)
-        self.lineEdit.setText('0')
+        self.lineEdit.setText('0 руб.')
 
     def create_tablets(self):
         cursor = self.connection.cursor()
@@ -191,25 +325,54 @@ class Lechenie(QMainWindow, Ui_Form2):
             elem = self.listWidget.selectedIndexes()[0].data()
             elem = elem.split(' - ')
             elem = elem[2][:-4]
-            self.lineEdit.setText(f'{int(self.lineEdit.text()) + int(elem)}')
+            self.lineEdit.setText(f'{int(self.lineEdit.text()[:-5]) + int(elem)} руб.')
         else:
             self.listWidget.addItem(self.comboBox.currentText() + f'  * {self.spinBox.value()} шт.')
             self.listWidget.setCurrentItem(self.listWidget.item(self.listWidget.count() - 1))
             elem = self.listWidget.selectedIndexes()[0].data()
             elem = elem.split(' - ')
             sum = int(elem[2][:-13]) * int(elem[2][-5])
-            self.lineEdit.setText(f'{int(self.lineEdit.text()) + sum}')
+            self.lineEdit.setText(f'{int(self.lineEdit.text()[:-5]) + sum} руб.')
 
     def delete(self):
         row = self.listWidget.row(self.listWidget.currentItem())
-        elem = self.listWidget.selectedIndexes()[0].data()
-        elem = elem.split(' - ')
-        if '*' in elem[2]:
-            sum = int(elem[2][:-13]) * int(elem[2][-5])
-        else:
-            sum = int(elem[2][:-4])
-        self.lineEdit.setText(f'{int(self.lineEdit.text()) - sum}')
-        self.listWidget.takeItem(row)
+        if row != -1:
+            elem = self.listWidget.selectedIndexes()[0].data()
+            elem = elem.split(' - ')
+            if '*' in elem[2]:
+                sum = int(elem[2][:-13]) * int(elem[2][-5])
+            else:
+                sum = int(elem[2][:-4])
+            self.lineEdit.setText(f'{int(self.lineEdit.text()[:-5]) - sum} руб.')
+            self.listWidget.takeItem(row)
+
+    def create_order(self):
+        items = [self.listWidget.item(row).text() for row in range(self.listWidget.count())]
+        self.zakaz = Zakaz(items, self.user_id, self.lineEdit.text())
+        self.zakaz.show()
+
+
+class Zakaz(QMainWindow, Ui_Form_zakaz):
+    def __init__(self, items, user_id, coast):
+        super().__init__()
+        self.setupUi(self)
+        self.connect = sqlite3.connect('tabletochki.db')
+        self.items = items
+        self.user_id = user_id
+        self.coast = coast
+        self.pushButton_ok.clicked.connect(self.ok)
+        self.pushButton_cancel.clicked.connect(lambda: self.hide())
+
+    def ok(self):
+        if self.lineEdit.text():
+            st = ''
+            for elem in self.items:
+                st += elem + '\n'
+            cursor = self.connect.cursor()
+            cursor.execute(f"""INSERT INTO table{self.user_id} (name, date, coast, info)
+                 VALUES ('{self.lineEdit.text()}', '{datetime.now().date()}', '{self.coast}', '{st}')""")
+            self.connect.commit()
+            self.hide()
 
 
 sys._excepthook = sys.excepthook
@@ -224,6 +387,6 @@ sys.excepthook = exception_hook
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = MainWindow()
+    ex = Registr()
     ex.show()
     sys.exit(app.exec())
