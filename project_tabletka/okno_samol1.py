@@ -134,7 +134,7 @@ class Ui_MainWindow_okno(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", " "))
         self.label.setText(_translate("MainWindow", "Итого:"))
         self.pushButton_save.setText(_translate("MainWindow", "Сохранить"))
         self.pushButton_2.setText(_translate("MainWindow", "Выйти"))

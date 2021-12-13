@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(187, 255, 187);</string>
+  </property>
   <widget class="QListWidget" name="listWidget">
    <property name="geometry">
     <rect>
@@ -21,6 +24,14 @@
      <width>411</width>
      <height>281</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI Light</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
@@ -32,8 +43,17 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI Light</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
+   </property>
    <property name="text">
-    <string>Ok</string>
+    <string>Ок</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -47,6 +67,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Microsoft YaHei UI Light</family>
      <pointsize>10</pointsize>
     </font>
    </property>

@@ -25,7 +25,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>220</x>
       <y>30</y>
       <width>401</width>
       <height>31</height>
@@ -44,7 +44,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>270</x>
       <y>90</y>
       <width>371</width>
       <height>31</height>
@@ -68,6 +68,11 @@
       <width>261</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft JhengHei UI Light</family>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -100,6 +105,11 @@
       <width>261</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI Light</family>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -193,6 +203,11 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI Light</family>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
@@ -224,6 +239,11 @@
       <width>261</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI Light</family>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -283,28 +303,6 @@
      <string>Войти!</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>80</y>
-      <width>61</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/newPrefix/Screenshot_11.png);</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>:/newPrefix/Screenshot_11.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
@@ -321,7 +319,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/newPrefix/Screenshot_6.png</pixmap>
+     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_6.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -343,7 +341,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/newPrefix/Screenshot_7.png</pixmap>
+     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_7.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -365,7 +363,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/newPrefix/Screenshot_10.png</pixmap>
+     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_10.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -387,7 +385,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/newPrefix/Screenshot_5.png</pixmap>
+     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_5.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -409,7 +407,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/newPrefix/Screenshot_8.png</pixmap>
+     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_8.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -431,7 +429,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/newPrefix/Screenshot_1.png</pixmap>
+     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_1.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -448,6 +446,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI Light</family>
       <underline>true</underline>
      </font>
     </property>
@@ -466,6 +465,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI Light</family>
       <underline>true</underline>
      </font>
     </property>
@@ -484,6 +484,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI Light</family>
       <underline>true</underline>
      </font>
     </property>

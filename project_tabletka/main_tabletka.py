@@ -10,6 +10,8 @@ from okno_samol1 import Ui_MainWindow_okno
 from okno_prof import Ui_MainWindow_prof
 from zakaz import Ui_Form_zakaz
 from info import Ui_Form_info
+from warning import Ui_MainWindow_warn
+from rules import Ui_MainWindow_rules
 
 
 class Registr(QMainWindow, Ui_MainWindow_reg):
@@ -91,6 +93,7 @@ class Kabinet(QMainWindow, Ui_MainWindow_kab):
         self.add_item_to_lw()
         self.pushButton.clicked.connect(self.yes)
         self.pushButton_2.clicked.connect(self.no)
+        self.pushButton_3.clicked.connect(self.exit)
         self.listWidget.doubleClicked.connect(self.info)
 
     def add_item_to_lw(self):
@@ -119,8 +122,14 @@ class Kabinet(QMainWindow, Ui_MainWindow_kab):
         self.lechenie.show()
 
     def no(self):
-        self.samolechenie = Samolechenie(self.user_id)
-        self.samolechenie.show()
+        self.warn = Warning(self.user_id)
+        self.warn.show()
+
+
+    def exit(self):
+        self.registr = Registr()
+        self.hide()
+        self.registr.show()
 
 
 class Info_Widget(QMainWindow, Ui_Form_info):
@@ -166,6 +175,7 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
                         self.checkBox_stomachpain,
                         self.checkBox_teethpain]
 
+
     def pills(self):
         lst_sympt = []
         for elem in self.disease:
@@ -181,6 +191,47 @@ class Samolechenie(QMainWindow, Ui_MainWindow):
                 lst_prof.append(elem.text())
         self.prof = Prevention(lst_prof, self.user_id)
         self.prof.show()
+
+
+class Rules(QMainWindow, Ui_MainWindow_rules):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.hiding)
+
+    def hiding(self):
+        self.hide()
+
+
+class Warning(QMainWindow, Ui_MainWindow_warn):
+    def __init__(self, user_id):
+        super().__init__()
+        self.setupUi(self)
+        self.user_id = user_id
+        self.pushButton_2.hide()
+        self.checkBox.clicked.connect(self.showing)
+        self._closable = False
+
+        self.pushButton_2.clicked.connect(self.hiding)
+        self.pushButton.clicked.connect(self.inf)
+
+    def closeEvent(self, evnt):
+        if self._closable:
+            super(Warning, self).closeEvent(evnt)
+        else:
+            evnt.ignore()
+
+    def showing(self):
+        self.pushButton_2.show()
+
+    def hiding(self):
+        self.samolechenie = Samolechenie(self.user_id)
+        self.samolechenie.show()
+        self.hide()
+
+    def inf(self):
+        self.rule = Rules()
+        self.rule.show()
 
 
 class FindPills(QMainWindow, Ui_MainWindow_okno):
@@ -205,6 +256,7 @@ class FindPills(QMainWindow, Ui_MainWindow_okno):
             elem = [str(i) for i in elem]
             elem[1] = list(cursor.execute(f"""SELECT name FROM symptoms WHERE id_symptom = {int(elem[1])}"""))
             elem[1] = str(elem[1])[3:-4]
+            elem[3] += ' руб.'
             st = ' - '.join(elem)
             self.listWidget.addItem(st)
 
@@ -220,7 +272,7 @@ class FindPills(QMainWindow, Ui_MainWindow_okno):
                if i[0] == elem[0]:
                     symp = list(cursor.execute(f"""SELECT name FROM symptoms WHERE id_symptom = {int(elem[2])}"""))
                     symp = str(symp)[3:-4]
-                    add.append(f'{elem[1]} - {symp} - {elem[3]} - {elem[4]} ')
+                    add.append(f'{elem[1]} - {symp} - {elem[3]} - {elem[4]} руб. ')
         add = list(map(lambda x: str(x), add))
         self.listWidget_2.addItems(add)
 
@@ -229,9 +281,9 @@ class FindPills(QMainWindow, Ui_MainWindow_okno):
         noun1 = [x.text().split(' - ') for x in self.listWidget_2.selectedItems()]
         counter = []
         for i in noun:
-            counter.append(int(i[3]))
+            counter.append(int(i[3][:-5]))
         for i in noun1:
-            counter.append(int(i[3]))
+            counter.append(int(i[3][:-5]))
         count = sum(counter)
         self.lineEdit.setText(f'{count} руб.')
 
@@ -271,7 +323,7 @@ class Prevention(QMainWindow, Ui_MainWindow_prof):
                     symp = list(cursor.execute(f"""SELECT name FROM symptoms
                     WHERE id_symptom in (SELECT for_what FROM prevention WHERE for_what = {int(elem[2])})"""))
                     symp = str(symp)[3:-4]
-                    add.append(f'{elem[1]} - {symp} - {elem[3]} - {elem[4]} ')
+                    add.append(f'{elem[1]} - {symp} - {elem[3]} - {elem[4]} руб.')
         add = list(map(lambda x: str(x), add))
         self.listWidget.addItems(add)
 
@@ -279,7 +331,7 @@ class Prevention(QMainWindow, Ui_MainWindow_prof):
         noun = [x.text().split(' - ') for x in self.listWidget.selectedItems()]
         counter = []
         for i in noun:
-            counter.append(int(i[3]))
+            counter.append(int(i[3][:-5]))
         count = sum(counter)
         self.lineEdit.setText(f'{count} руб.')
 

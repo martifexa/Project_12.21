@@ -128,7 +128,7 @@ class Ui_Form2(object):
 
     def retranslateUi(self, Form2):
         _translate = QtCore.QCoreApplication.translate
-        Form2.setWindowTitle(_translate("Form2", "Form"))
+        Form2.setWindowTitle(_translate("Form2", "Лечение"))
         self.label.setText(_translate("Form2", "Введите название лекарства и выберите нужное"))
         self.pushButton_delete.setText(_translate("Form2", "Удалить"))
         self.pushButton_back.setText(_translate("Form2", "Назад"))

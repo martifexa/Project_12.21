@@ -108,7 +108,7 @@ class Ui_MainWindow_prof(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Профилактика"))
         self.label.setText(_translate("MainWindow", "Профилактические средства по вашему запросу:"))
         self.pushButton_itog.setText(_translate("MainWindow", "Итого"))
         self.pushButton_save.setText(_translate("MainWindow", "Сохранить"))
