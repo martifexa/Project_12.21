@@ -26,9 +26,9 @@ background-color: rgb(187, 255, 187);</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>170</x>
       <y>10</y>
-      <width>141</width>
+      <width>351</width>
       <height>41</height>
      </rect>
     </property>
@@ -45,10 +45,10 @@ background-color: rgb(187, 255, 187);</string>
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>140</y>
+      <x>30</x>
+      <y>160</y>
       <width>271</width>
-      <height>291</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="font">
@@ -178,29 +178,7 @@ background-color: rgb(255, 255, 255);</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/i.jpg</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>30</y>
-      <width>41</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/newPrefix/Screenshot_7.png);</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_7.png</pixmap>
+     <pixmap>:/newPrefix/i.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -222,7 +200,7 @@ background-color: rgb(255, 255, 255);</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_2.png</pixmap>
+     <pixmap>:/newPrefix/Screenshot_2.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -244,7 +222,7 @@ background-color: rgb(255, 255, 255);</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../../../Desktop/proj/projj.qrc">:/newPrefix/Screenshot_6.png</pixmap>
+     <pixmap>:/newPrefix/Screenshot_6.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -270,6 +248,28 @@ background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>Выйти</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_update">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>130</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI Light</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Обновить</string>
     </property>
    </widget>
   </widget>
