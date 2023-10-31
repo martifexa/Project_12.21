@@ -18,7 +18,7 @@ class Registr(QMainWindow, Ui_MainWindow_reg):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.connection = sqlite3.connect('tabletochki.db')
+        self.connection = sqlite3.connect(r'C:\Users\danya\PycharmProjects\Project_12.21\project_tabletka\tabletochki.db')
         self.label_16.hide()
         self.label_17.hide()
         self.label_18.hide()
@@ -32,7 +32,7 @@ class Registr(QMainWindow, Ui_MainWindow_reg):
         self.label_16.hide()
         self.label_17.hide()
         self.label_18.hide()
-        self.label_18.setText('Такой логин уже существует')
+        self.label_18.setText('Такой логин уже существует!')
 
     def login(self):
         if self.lineEdit.text():
@@ -55,7 +55,7 @@ class Registr(QMainWindow, Ui_MainWindow_reg):
                                     info STRING
                                     )""")
                 self.connection.commit()
-                self.kabinet = Kabinet(id_user)
+                self.kabinet = Kabinet(id_user, self.lineEdit.text())
                 self.kabinet.show()
                 self.hide()
             else:
@@ -77,7 +77,7 @@ class Registr(QMainWindow, Ui_MainWindow_reg):
             WHERE id_user = {int(str(id_user)[2:-3])}"""))
             right_password[0] = list(right_password[0])
             if self.lineEdit_3.text() == right_password[0][0]:
-                self.kabinet = Kabinet(str(id_user)[2:-3])
+                self.kabinet = Kabinet(str(id_user)[2:-3], self.lineEdit_4.text())
                 self.kabinet.show()
                 self.hide()
             else:
@@ -85,15 +85,18 @@ class Registr(QMainWindow, Ui_MainWindow_reg):
 
 
 class Kabinet(QMainWindow, Ui_MainWindow_kab):
-    def __init__(self, id_user):
+    def __init__(self, id_user, name):
         super().__init__()
         self.setupUi(self)
-        self.connection = sqlite3.connect('tabletochki.db')
+        self.connection = sqlite3.connect(r'C:\Users\danya\PycharmProjects\Project_12.21\project_tabletka\tabletochki.db')
         self.user_id = id_user
         self.add_item_to_lw()
+        self.name = name
+        self.label.setText(f'Здравствуйте, {self.name}')
         self.pushButton.clicked.connect(self.yes)
         self.pushButton_2.clicked.connect(self.no)
         self.pushButton_3.clicked.connect(self.exit)
+        self.pushButton_update.clicked.connect(self.updat)
         self.listWidget.doubleClicked.connect(self.info)
 
     def add_item_to_lw(self):
@@ -102,7 +105,9 @@ class Kabinet(QMainWindow, Ui_MainWindow_kab):
         items = list(map(list, items))
         for elem in items:
             st = f'{elem[0]} : {elem[1]} - {elem[2]}'
-            self.listWidget.addItem(st)
+            self.listWidget.insertItem(0, st)
+        while self.listWidget.count() > 14:
+            self.listWidget.takeItem(14)
 
     def info(self):
         cursor = self.connection.cursor()
@@ -125,11 +130,15 @@ class Kabinet(QMainWindow, Ui_MainWindow_kab):
         self.warn = Warning(self.user_id)
         self.warn.show()
 
-
     def exit(self):
         self.registr = Registr()
         self.hide()
         self.registr.show()
+
+    def updat(self):
+        self.hide()
+        self.kabinet = Kabinet(self.user_id, self.name)
+        self.kabinet.show()
 
 
 class Info_Widget(QMainWindow, Ui_Form_info):
@@ -145,10 +154,11 @@ class Info_Widget(QMainWindow, Ui_Form_info):
     def dan(self):
         self.info[0] = list(self.info[0])
         info = self.info[0][0].split('\n')
+        info.remove(info[-1])
         info.append('\n')
         info.append(f'Дата заказа: {self.date}')
         info.append(f"Общая сумма заказа: {self.cost}")
-        self.listWidget.addItems(info)
+        self.listWidget.insertItems(0, info)
 
 
 class Samolechenie(QMainWindow, Ui_MainWindow):
@@ -240,7 +250,7 @@ class FindPills(QMainWindow, Ui_MainWindow_okno):
         self.lst_sympt = lst_sympt
         self.user_id = user_id
         self.setupUi(self)
-        self.connection = sqlite3.connect('tabletochki.db')
+        self.connection = sqlite3.connect(r'C:\Users\danya\PycharmProjects\Project_12.21\project_tabletka\tabletochki.db')
         self.create_tablets()
         self.create_analogues()
         self.pushButton_save_2.clicked.connect(self.count)
@@ -304,7 +314,7 @@ class Prevention(QMainWindow, Ui_MainWindow_prof):
         self.lst_prof = lst_prof
         self.user_id = user_id
         self.setupUi(self)
-        self.connection = sqlite3.connect('tabletochki.db')
+        self.connection = sqlite3.connect(r'C:\Users\danya\PycharmProjects\Project_12.21\project_tabletka\tabletochki.db')
         self.create_prevents()
         self.pushButton_itog.clicked.connect(self.count)
         self.pushButton_3.clicked.connect(self.exit)
@@ -349,7 +359,7 @@ class Lechenie(QMainWindow, Ui_Form2):
         super().__init__()
         self.setupUi(self)
         self.user_id = user_id
-        self.connection = sqlite3.connect('tabletochki.db')
+        self.connection = sqlite3.connect(r'C:\Users\danya\PycharmProjects\Project_12.21\project_tabletka\tabletochki.db')
         self.comboBox.setEditable(True)
         self.create_tablets()
         self.pushButton_add.clicked.connect(self.add)
@@ -408,12 +418,13 @@ class Zakaz(QMainWindow, Ui_Form_zakaz):
     def __init__(self, items, user_id, coast):
         super().__init__()
         self.setupUi(self)
-        self.connect = sqlite3.connect('tabletochki.db')
+        self.connect = sqlite3.connect(r'C:\Users\danya\PycharmProjects\Project_12.21\project_tabletka\tabletochki.db')
         self.items = items
         self.user_id = user_id
         self.coast = coast
         self.pushButton_ok.clicked.connect(self.ok)
         self.pushButton_cancel.clicked.connect(lambda: self.hide())
+        self.lineEdit.textChanged.connect(lambda: self.label_2.hide())
 
     def ok(self):
         if self.lineEdit.text():
@@ -421,10 +432,15 @@ class Zakaz(QMainWindow, Ui_Form_zakaz):
             for elem in self.items:
                 st += elem + '\n'
             cursor = self.connect.cursor()
-            cursor.execute(f"""INSERT INTO table{self.user_id} (name, date, coast, info)
-                 VALUES ('{self.lineEdit.text()}', '{datetime.now().date()}', '{self.coast}', '{st}')""")
-            self.connect.commit()
-            self.hide()
+            names = list(cursor.execute(f"""SELECT name FROM table{self.user_id}"""))
+            names = list(map(lambda x: str(x)[2:-3], names))
+            if self.lineEdit.text() in names:
+                self.label_2.show()
+            else:
+                cursor.execute(f"""INSERT INTO table{self.user_id} (name, date, coast, info)
+                     VALUES ('{self.lineEdit.text()}', '{datetime.now().date()}', '{self.coast}', '{st}')""")
+                self.connect.commit()
+                self.hide()
 
 
 sys._excepthook = sys.excepthook

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form_zakaz(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(460, 84)
+        Form.resize(460, 86)
         font = QtGui.QFont()
         font.setPointSize(10)
         Form.setFont(font)
@@ -31,6 +31,7 @@ class Ui_Form_zakaz(object):
         self.lineEdit.setGeometry(QtCore.QRect(160, 20, 281, 20))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI Light")
+        font.setPointSize(8)
         self.lineEdit.setFont(font)
         self.lineEdit.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.lineEdit.setObjectName("lineEdit")
@@ -50,13 +51,18 @@ class Ui_Form_zakaz(object):
         self.pushButton_cancel.setFont(font)
         self.pushButton_cancel.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.pushButton_cancel.setObjectName("pushButton_cancel")
+        self.label_2 = QtWidgets.QLabel(Form)
+        self.label_2.setGeometry(QtCore.QRect(160, 50, 121, 21))
+        self.label_2.setObjectName("label_2")
+        self.label_2.hide()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Заказ"))
+        Form.setWindowTitle(_translate("Form", " "))
         self.label.setText(_translate("Form", "Назовите ваш заказ:"))
         self.pushButton_ok.setText(_translate("Form", "Ок"))
         self.pushButton_cancel.setText(_translate("Form", "Отмена"))
+        self.label_2.setText(_translate("Form", "Такой заказ уже есть!"))
